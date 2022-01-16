@@ -34,7 +34,7 @@ X_train, y_train, encoder, lb = process_data(
     training=True
 )
 
-# Proces the test data with the process_data function.
+# Process the test data with the process_data function.
 X_test, y_test, encoder, lb = process_data(
     test,
     categorical_features=cat_features,
@@ -47,6 +47,7 @@ X_test, y_test, encoder, lb = process_data(
 # Train and save model and one hot encoder
 model = train_model(X_train, y_train)
 print("Completed training model.")
-print("Saving to model and encoder to `model` directory")
+print("Saving model, encoder and label binarizer  to `model` directory")
 dump(model, "../model/rf_model.joblib")
 dump(encoder, "../model/one_hot_encoder.joblib")
+dump(lb, "../model/label_binarizer.joblib")
