@@ -19,6 +19,16 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         if [ -f starter/requirements.txt ]; then pip install -r starter/requirements.txt; fi
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - name: Setup DVC
+      uses: iterative/setup-dvc@v1
+    - name: Retrieve needed files from DVC Storage
+      run: |
+       dvc pull
     - name: Lint with flake8
       run: |
         flake8 . 
