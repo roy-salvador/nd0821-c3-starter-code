@@ -1,1 +1,4 @@
 
+/label_binarizer.joblib
+/one_hot_encoder.joblib
+/rf_model.joblib
