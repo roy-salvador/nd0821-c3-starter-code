@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field
 import pandas as pd
 from joblib import load
 import sys
+import os
 
 # Set path to so we can import our code
 sys.path.append('starter')
@@ -35,9 +36,10 @@ class ModelInputItem(BaseModel):
 
 
 # Load model and encoder
-model = load('model/rf_model.joblib')
-encoder = load('model/one_hot_encoder.joblib')
-lb = load('model/label_binarizer.joblib')
+model_dir = os.path.join(os.path.dirname(__file__), 'model')
+model = load(os.path.join(model_dir, 'rf_model.joblib'))
+encoder = load(os.path.join(model_dir, 'one_hot_encoder.joblib'))
+lb = load(os.path.join(model_dir, 'label_binarizer.joblib'))
 
 # Categorical features
 cat_features = [

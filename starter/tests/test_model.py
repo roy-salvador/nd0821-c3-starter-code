@@ -4,6 +4,7 @@ import pytest
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from joblib import load
+import os
 
 # Set path to so we can import our code
 sys.path.append('starter/starter')
@@ -13,13 +14,17 @@ if True:
     from ml.model import inference
     from ml.data import process_data
 
+file_dir = os.path.dirname(__file__)
+model_dir = os.path.join(file_dir, '..', 'model')
+data_dir = os.path.join(file_dir, '..', 'data')
+
 
 @pytest.fixture
 def model():
     """
     Load trained Random Forest model
     """
-    return load('starter/model/rf_model.joblib')
+    return load(os.path.join(model_dir, 'rf_model.joblib'))
 
 
 @pytest.fixture
@@ -27,7 +32,7 @@ def encoder():
     """
     Load one hot encoder
     """
-    return load('starter/model/one_hot_encoder.joblib')
+    return load(os.path.join(model_dir, 'one_hot_encoder.joblib'))
 
 
 @pytest.fixture
@@ -35,7 +40,7 @@ def lb():
     """
     Load label binarizer
     """
-    return load('starter/model/label_binarizer.joblib')
+    return load(os.path.join(model_dir, 'label_binarizer.joblib'))
 
 
 @pytest.fixture
@@ -52,7 +57,7 @@ def data(encoder, lb, num_samples):
     """
     Sample few records for testing.
     """
-    df = pd.read_csv('starter/data/census_cleaned.csv')
+    df = pd.read_csv(os.path.join(data_dir, 'census_cleaned.csv'))
     df = df.sample(num_samples)
 
     cat_features = [
