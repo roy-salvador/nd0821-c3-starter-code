@@ -22,7 +22,8 @@ def process_data(
     ------
     X : pd.DataFrame
         Dataframe containing the features and label. Columns in
-        `categorical_features` categorical_features: list[str]
+        `categorical_features`
+    categorical_features: list[str]
         List containing the names of the categorical features (default=[])
     label : str
         Name of the label column in `X`. If None, then an empty array will

@@ -1,4 +1,4 @@
 outs:
-- md5: 267f93287e730a9d9ad082a370cdd713
-  size: 66050022
+- md5: 48a0432173c97df5aff7d323d77902e5
+  size: 65501670
   path: rf_model.joblib

@@ -1,5 +1,7 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
+from ml.data import process_data
+import pandas as pd
 
 # Optional: implement hyperparameter tuning.
 
@@ -64,3 +66,66 @@ def inference(model, X):
         Predictions from the model.
     """
     return model.predict(X)
+
+
+def compute_slice_metrics(
+        data,
+        feature,
+        categorical_features,
+        label,
+        model,
+        encoder,
+        lb):
+    """
+    Validates the trained machine learning model using precision,
+    recall, and F1 for each slice of data in the given feature
+
+    Inputs
+    ------
+    data : pd.Dataframe
+        Dataframe containing the features and label.
+        The dataset to perform the test on
+    feature : str
+        The categorical feature to use for slicing
+    categorical_features: list[str]
+        List containing the names of the categorical features
+    label : str
+        Name of the label column in `X`.
+    model : sklearn.ensemble._forest.RandomForestClassifier
+        Trained machine learning model.
+    encoder : sklearn.preprocessing._encoders.OneHotEncoder
+        Trained sklearn OneHotEncoder
+    lb : sklearn.preprocessing._label.LabelBinarizer
+        Trained sklearn LabelBinarizer
+
+    Returns
+    -------
+    result : pd.Dataframe
+        Dataframe containing the performance results of each slice (row).
+        Columns include the following:
+            precision : float
+            recall : float
+            fbeta : float
+    """
+    result = pd.DataFrame(columns=['slice', 'precision', 'recall', 'fbeta'])
+
+    for slice_val in data[feature].unique():
+
+        # Filter the slice and encode
+        X, y, encoder, lb = process_data(
+            data[data[feature] == slice_val],
+            categorical_features=categorical_features,
+            label=label,
+            training=False,
+            encoder=encoder,
+            lb=lb
+        )
+
+        # Get predictions for the slice
+        preds = inference(model, X)
+
+        # Calculate performance metrics for the slice and append to dataframe
+        result.loc[len(result)] = [slice_val] + \
+            list(compute_model_metrics(y, preds))
+
+    return result
