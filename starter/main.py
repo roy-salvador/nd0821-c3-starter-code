@@ -8,6 +8,7 @@ import os
 
 # Set path to so we can import our code
 sys.path.append('starter')
+sys.path.append('starter/starter')
 if True:
     from ml.data import process_data
     from ml.model import inference
@@ -33,6 +34,14 @@ class ModelInputItem(BaseModel):
     native_country: str = Field(
         alias='native-country',
         example='United-States')
+
+
+# Pull data from DVC storage on app start up
+if "DYNO" in os.environ and os.path.isdir(".dvc"):
+    os.system("dvc config core.no_scm true")
+    if os.system("dvc pull") != 0:
+        exit("dvc pull failed")
+    os.system("rm -r .dvc .apt/usr/lib/dvc")
 
 
 # Load model and encoder
